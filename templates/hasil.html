@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hasil Rekomendasi Laptop</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0; padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+            text-align: left;
+        }
+        thead {
+            background-color: #007bff;
+            color: white;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        tbody tr:hover {
+            background-color: #f1f9ff;
+        }
+        .message {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin: 40px 0;
+        }
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        a.back-link:hover {
+            background-color: #0056b3;
+        }
+        .best-row {
+            background-color: #d4edda !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Hasil Rekomendasi Laptop</h2>
+
+    {% if message %}
+        <p class="message">{{ message }}</p>
+    {% else %}
+        <p>Jumlah hasil: {{ hasil|length }}</p>
+        <p>Skor terbaik: {{ best_score | round(4) }}</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Type</th>
+                    <th>CPU</th>
+                    <th>GPU</th>
+                    <th>RAM (GB)</th>
+                    <th>Price</th>
+                    <th>Weight (kg)</th>
+                    <th>Jarak A+</th>
+                    <th>Jarak A-</th>
+                    <th>Score</th>
+                    <th>Rekomendasi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for laptop in hasil %}
+                <tr class="{% if laptop.TOPSIS_Score == best_score %}best-row{% endif %}">
+                    <td data-label="Company">{{ laptop.Company }}</td>
+                    <td data-label="Type">{{ laptop.TypeName }}</td>
+                    <td data-label="CPU">{{ laptop.CPU }}</td>
+                    <td data-label="GPU">{{ laptop.Gpu_brand }}</td>
+                    <td data-label="RAM">{{ laptop.Ram }}</td>
+                    <td data-label="Price">{{ laptop.Price }}</td>
+                    <td data-label="Weight">{{ laptop.Weight }}</td>
+                    <td data-label="Jarak A+">{{ laptop.Dist_Positive | round(4) }}</td>
+                    <td data-label="Jarak A-">{{ laptop.Dist_Negative | round(4) }}</td>
+                    <td data-label="Score">{{ laptop.TOPSIS_Score | round(4) }}</td>
+                    <td data-label="Rekomendasi">
+                        {% if laptop.TOPSIS_Score == best_score %}⭐ Terbaik{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <a href="/" class="back-link">Kembali ke Form</a>
+</div>
+</body>
+</html>
